@@ -69,9 +69,16 @@ class CodableFeedStore: FeedStore {
 		
 		let storeUrl = self.storeUrl
 		queue.async(flags: .barrier) {
-			let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
-			try! encodedData.write(to: storeUrl)
-			completion(nil)
+			
+			do {
+				
+				let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
+				try encodedData.write(to: storeUrl)
+				completion(nil)
+			} catch {
+				
+				completion(error)
+			}
 		}
 	}
 	
@@ -192,8 +199,8 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	// - MARK: Helpers
 	
-	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore(storeUrl: testSpecificUrl())
+	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
@@ -237,21 +244,22 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	}
 }
 
-//extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
-//
-//	func test_insert_deliversErrorOnInsertionError() {
-////		let sut = makeSUT()
-////
-////		assertThatInsertDeliversErrorOnInsertionError(on: sut)
-//	}
-//
-//	func test_insert_hasNoSideEffectsOnInsertionError() {
-////		let sut = makeSUT()
-////
-////		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
-//	}
-//
-//}
+extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
+	
+	func test_insert_deliversErrorOnInsertionError() {
+		let invalidStorePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
+		let sut = makeSUT(storeUrl: invalidStorePath)
+		
+		assertThatInsertDeliversErrorOnInsertionError(on: sut)
+	}
+	
+	func test_insert_hasNoSideEffectsOnInsertionError() {
+		//		let sut = makeSUT()
+		//
+		//		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
+	}
+	
+}
 
 //extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
 //
