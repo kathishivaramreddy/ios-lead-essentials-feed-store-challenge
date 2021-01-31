@@ -117,11 +117,12 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	override func setUp() {
 		super.setUp()
-		try? FileManager.default.removeItem(at: testSpecificUrl())
+		setupMemoryBeforeTest()
 	}
 	
 	override func tearDown() {
 		super.tearDown()
+		clearMemoryAfterTest()
 		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 	
@@ -217,6 +218,14 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	private func testSpecificUrl() -> URL {
 		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
+	}
+	
+	private func setupMemoryBeforeTest() {
+		try? FileManager.default.removeItem(at: testSpecificUrl())
+	}
+	
+	private func clearMemoryAfterTest() {
+		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 }
 
