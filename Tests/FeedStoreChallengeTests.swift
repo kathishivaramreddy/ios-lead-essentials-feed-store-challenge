@@ -227,9 +227,9 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	}
 
 	func test_retrieve_hasNoSideEffectsOnFailure() {
-//		let sut = makeSUT()
-//
-//		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
+		let sut = makeSUT()
+		try! "InvalidData".write(to: testSpecificUrl(), atomically: false, encoding: .utf8)
+		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
 	}
 
 }
