@@ -247,19 +247,22 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	
 	func test_insert_deliversErrorOnInsertionError() {
-		let invalidStorePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
-		let sut = makeSUT(storeUrl: invalidStorePath)
+		
+		let sut = makeSUT(storeUrl: inValidStoreUrl())
 		
 		assertThatInsertDeliversErrorOnInsertionError(on: sut)
 	}
 	
 	func test_insert_hasNoSideEffectsOnInsertionError() {
-		let invalidStorePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
-		let sut = makeSUT(storeUrl: invalidStorePath)
+		
+		let sut = makeSUT(storeUrl: inValidStoreUrl())
 		
 		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
 	}
 	
+	private func inValidStoreUrl() -> URL {
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
+	}
 }
 
 //extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
