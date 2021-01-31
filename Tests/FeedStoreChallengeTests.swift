@@ -58,11 +58,13 @@ class CodableFeedStore: FeedStore {
 				return completion(nil)
 			}
 			
-			try! FileManager.default.removeItem(at: self.storeUrl)
-			completion(nil)
+			do {
+				try FileManager.default.removeItem(at: self.storeUrl)
+				completion(nil)
+			} catch {
+				completion(error)
+			}
 		}
-		
-		
 	}
 	
 	func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
@@ -282,18 +284,19 @@ extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	}
 }
 
-//extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
+extension FeedStoreChallengeTests: FailableDeleteFeedStoreSpecs {
+
+	func test_delete_deliversErrorOnDeletionError() {
+		let noDeletePermissionStoreUrl = cachesDirectory()
+		let sut = makeSUT(storeUrl: noDeletePermissionStoreUrl)
+		
+		assertThatDeleteDeliversErrorOnDeletionError(on: sut)
+	}
+
+	func test_delete_hasNoSideEffectsOnDeletionError() {
+//		let sut = makeSUT()
 //
-//	func test_delete_deliversErrorOnDeletionError() {
-////		let sut = makeSUT()
-////
-////		assertThatDeleteDeliversErrorOnDeletionError(on: sut)
-//	}
-//
-//	func test_delete_hasNoSideEffectsOnDeletionError() {
-////		let sut = makeSUT()
-////
-////		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
-//	}
-//
-//}
+//		assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
+	}
+
+}
