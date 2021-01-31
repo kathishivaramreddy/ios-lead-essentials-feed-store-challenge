@@ -22,12 +22,15 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	override func setUp() {
 		super.setUp()
+		
 		setupMemoryBeforeTest()
 	}
 	
 	override func tearDown() {
 		super.tearDown()
+		
 		clearMemoryAfterTest()
+		
 		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 	
@@ -169,14 +172,12 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	
 	func test_insert_deliversErrorOnInsertionError() {
-		
 		let sut = makeSUT(storeUrl: inValidStoreUrl())
 		
 		assertThatInsertDeliversErrorOnInsertionError(on: sut)
 	}
 	
 	func test_insert_hasNoSideEffectsOnInsertionError() {
-		
 		let sut = makeSUT(storeUrl: inValidStoreUrl())
 		
 		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
