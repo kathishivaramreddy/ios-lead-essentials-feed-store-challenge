@@ -221,10 +221,14 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 	
 	private func setupMemoryBeforeTest() {
-		try? FileManager.default.removeItem(at: testSpecificUrl())
+		removeArtifcatsFromMemory()
 	}
 	
 	private func clearMemoryAfterTest() {
+		removeArtifcatsFromMemory()
+	}
+	
+	private func removeArtifcatsFromMemory() {
 		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 }
