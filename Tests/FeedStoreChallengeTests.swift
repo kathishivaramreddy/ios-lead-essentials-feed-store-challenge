@@ -47,32 +47,45 @@ class CodableFeedStore: FeedStore {
 		self.storeUrl = storeUrl
 	}
 	
+	private let queue = DispatchQueue(label: "CodableFeedStore", qos: .userInitiated, attributes: .concurrent)
+	
 	func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		
-		guard FileManager.default.fileExists(atPath: self.storeUrl.path) else {
-			return completion(nil)
+		let storeUrl = self.storeUrl
+		queue.async(flags: .barrier) {
+			
+			guard FileManager.default.fileExists(atPath: storeUrl.path) else {
+				return completion(nil)
+			}
+			
+			try! FileManager.default.removeItem(at: self.storeUrl)
+			completion(nil)
 		}
 		
-		try! FileManager.default.removeItem(at: self.storeUrl)
-		completion(nil)
 		
 	}
 	
 	func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		
-		let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
-		try! encodedData.write(to: storeUrl)
-		completion(nil)
+		let storeUrl = self.storeUrl
+		queue.async(flags: .barrier) {
+			let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
+			try! encodedData.write(to: storeUrl)
+			completion(nil)
+		}
 	}
 	
 	func retrieve(completion: @escaping RetrievalCompletion) {
 		
-		guard let encodedData = try? Data(contentsOf: storeUrl) else {
-			return completion(.empty)
+		let storeUrl = self.storeUrl
+		queue.async {
+			guard let encodedData = try? Data(contentsOf: storeUrl) else {
+				return completion(.empty)
+			}
+			
+			let decodedData = try! JSONDecoder().decode(Cache.self, from: encodedData)
+			completion(.found(feed: decodedData.local, timestamp: decodedData.timeStamp))
 		}
-		
-		let decodedData = try! JSONDecoder().decode(Cache.self, from: encodedData)
-		completion(.found(feed: decodedData.local, timestamp: decodedData.timeStamp))
 	}
 }
 
