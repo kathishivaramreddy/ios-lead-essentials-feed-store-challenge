@@ -108,12 +108,16 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	// - MARK: Helpers
 	
-	private func makeSUT() -> FeedStore {
+	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
 		let sut = CodableFeedStore()
-		addTeardownBlock { [weak sut] in
-			XCTAssertNil(sut)
-		}
+		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
+	}
+	
+	private func memoryLeakTracker(instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(instance)
+		}
 	}
 	
 }
