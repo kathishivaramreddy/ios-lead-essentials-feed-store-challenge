@@ -254,9 +254,10 @@ extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	}
 	
 	func test_insert_hasNoSideEffectsOnInsertionError() {
-		//		let sut = makeSUT()
-		//
-		//		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
+		let invalidStorePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
+		let sut = makeSUT(storeUrl: invalidStorePath)
+		
+		assertThatInsertHasNoSideEffectsOnInsertionError(on: sut)
 	}
 	
 }
