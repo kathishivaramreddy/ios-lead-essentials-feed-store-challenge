@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct LocalFeedImage: Equatable {
+public struct LocalFeedImage: Equatable, Codable {
 	public let id: UUID
 	public let description: String?
 	public let location: String?
@@ -15,5 +15,15 @@ public struct LocalFeedImage: Equatable {
 		self.description = description
 		self.location = location
 		self.url = url
+	}
+}
+
+extension LocalFeedImage {
+	
+	enum CodingKeys: String, CodingKey {
+		case id
+		case description
+		case location
+		case url = "imageURL"
 	}
 }

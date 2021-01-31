@@ -7,16 +7,33 @@ import FeedStoreChallenge
 
 class CodableFeedStore: FeedStore {
 	
+	private struct Cache: Codable {
+		
+		let items: [LocalFeedImage]
+		let timeStamp: Date
+	}
+	
+	private let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+	
 	func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		
 	}
 	
 	func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		
+		let encodedData = try! JSONEncoder().encode(Cache(items: feed, timeStamp: timestamp))
+		try! encodedData.write(to: storeUrl)
+		completion(nil)
 	}
 	
 	func retrieve(completion: @escaping RetrievalCompletion) {
-		completion(.empty)
+		
+		guard let encodedData = try? Data(contentsOf: storeUrl) else {
+			return completion(.empty)
+		}
+		
+		let decodedData = try! JSONDecoder().decode(Cache.self, from: encodedData)
+		completion(.found(feed: decodedData.items, timestamp: decodedData.timeStamp))
 	}
 }
 
@@ -34,6 +51,19 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	//
 	//  ***********************
 	
+	override func setUp() {
+		super.setUp()
+		
+		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+		try? FileManager.default.removeItem(at: storeUrl)
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+		try? FileManager.default.removeItem(at: storeUrl)
+	}
+	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
 		let sut = makeSUT()
 		
@@ -47,9 +77,9 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 	
 	func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
-		//		let sut = makeSUT()
-		//
-		//		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
+		let sut = makeSUT()
+		
+		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
 	}
 	
 	func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
