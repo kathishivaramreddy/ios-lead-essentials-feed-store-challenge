@@ -11,18 +11,15 @@ import Foundation
 public final class CodableFeedStore: FeedStore {
 	
 	private struct Cache: Codable {
-		
 		let items: [CodableFeedImage]
 		let timeStamp: Date
 		
 		var local: [LocalFeedImage] {
-			
 			return items.map { $0.localFeed }
 		}
 	}
 	
 	private struct CodableFeedImage: Codable {
-		
 		private let id: UUID
 		private let description: String?
 		private let location: String?
@@ -46,17 +43,14 @@ public final class CodableFeedStore: FeedStore {
 	private let storeUrl: URL
 	
 	public init(storeUrl: URL) {
-		
 		self.storeUrl = storeUrl
 	}
 	
 	private let queue = DispatchQueue(label: "CodableFeedStore", qos: .userInitiated, attributes: .concurrent)
 	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-		
 		let storeUrl = self.storeUrl
 		queue.async(flags: .barrier) {
-			
 			guard FileManager.default.fileExists(atPath: storeUrl.path) else {
 				return completion(nil)
 			}
@@ -71,12 +65,9 @@ public final class CodableFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		
 		let storeUrl = self.storeUrl
 		queue.async(flags: .barrier) {
-			
 			do {
-				
 				let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
 				try encodedData.write(to: storeUrl)
 				completion(nil)
@@ -88,7 +79,6 @@ public final class CodableFeedStore: FeedStore {
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		
 		let storeUrl = self.storeUrl
 		queue.async {
 			guard let encodedData = try? Data(contentsOf: storeUrl) else {
@@ -101,7 +91,6 @@ public final class CodableFeedStore: FeedStore {
 			} catch {
 				completion(.failure(error))
 			}
-			
 		}
 	}
 }
