@@ -85,15 +85,12 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	override func setUp() {
 		super.setUp()
-		
-		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
-		try? FileManager.default.removeItem(at: storeUrl)
+		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 	
 	override func tearDown() {
 		super.tearDown()
-		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
-		try? FileManager.default.removeItem(at: storeUrl)
+		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -183,7 +180,7 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 	
 	private func testSpecificUrl() -> URL {
-		return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-test-feed.store")
+		return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of:self))-test.store")
 	}
 }
 
