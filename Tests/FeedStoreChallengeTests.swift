@@ -171,8 +171,7 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
-		let sut = CodableFeedStore(storeUrl: storeUrl)
+		let sut = CodableFeedStore(storeUrl: testSpecificUrl())
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
@@ -183,6 +182,9 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 		}
 	}
 	
+	private func testSpecificUrl() -> URL {
+		return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-test-feed.store")
+	}
 }
 
 //  ***********************
