@@ -211,8 +211,12 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 		}
 	}
 	
+	private func cachesDirectory() -> URL {
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+	}
+	
 	private func testSpecificUrl() -> URL {
-		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of:self))-test.store")
+		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
 	}
 }
 
@@ -261,7 +265,7 @@ extension FeedStoreChallengeTests: FailableInsertFeedStoreSpecs {
 	}
 	
 	private func inValidStoreUrl() -> URL {
-		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("invalid//:store")
+		return cachesDirectory().appendingPathComponent("invalid//:store")
 	}
 }
 
