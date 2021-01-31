@@ -20,10 +20,10 @@ class CodableFeedStore: FeedStore {
 	
 	private struct CodableFeedImage: Codable {
 		
-		let id: UUID
-		let description: String?
-		let location: String?
-		let imageURL: URL
+		private let id: UUID
+		private let description: String?
+		private let location: String?
+		private let imageURL: URL
 		
 		init(_ feed: LocalFeedImage) {
 			self.id = feed.id
