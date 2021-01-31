@@ -40,7 +40,12 @@ class CodableFeedStore: FeedStore {
 		}
 	}
 	
-	private let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+	private let storeUrl: URL
+	
+	init(storeUrl: URL) {
+		
+		self.storeUrl = storeUrl
+	}
 	
 	func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		
@@ -166,7 +171,8 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore()
+		let storeUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+		let sut = CodableFeedStore(storeUrl: storeUrl)
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
