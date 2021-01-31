@@ -110,6 +110,9 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	
 	private func makeSUT() -> FeedStore {
 		let sut = CodableFeedStore()
+		addTeardownBlock { [weak sut] in
+			XCTAssertNil(sut)
+		}
 		return sut
 	}
 	
