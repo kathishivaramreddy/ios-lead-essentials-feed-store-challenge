@@ -18,3 +18,25 @@ extension XCTestCase {
 	}
 }
 
+extension XCTestCase {
+		
+	func removeArtifactsFromMemory() {
+		try? FileManager.default.removeItem(at: testSpecificUrl())
+	}
+	
+	func setupEmptyStoreState() {
+		removeArtifactsFromMemory()
+	}
+
+	func undoStoreSideEffects() {
+		removeArtifactsFromMemory()
+	}
+
+	func cachesDirectory() -> URL {
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+	}
+
+	func testSpecificUrl() -> URL {
+		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
+	}
+}

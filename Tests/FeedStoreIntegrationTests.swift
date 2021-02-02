@@ -17,13 +17,13 @@ class FeedStoreIntegrationTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		setupEmptyStoreState(for: self)
+		setupEmptyStoreState()
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		
-		undoStoreSideEffects(for: self)
+		undoStoreSideEffects()
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -72,7 +72,7 @@ class FeedStoreIntegrationTests: XCTestCase {
 	// - MARK: Helpers
 	
 	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl(for: self))
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}

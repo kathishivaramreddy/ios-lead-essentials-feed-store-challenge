@@ -23,13 +23,13 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	override func setUp() {
 		super.setUp()
 		
-		setupEmptyStoreState(for: self)
+		setupEmptyStoreState()
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		
-		undoStoreSideEffects(for: self)
+		undoStoreSideEffects()
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -107,7 +107,7 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl(for: self))
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
@@ -137,7 +137,7 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	}
 	
 	private func writeInvalidDataToMemory() {
-		try! "InvalidData".write(to: testSpecificUrl(for: self), atomically: false, encoding: .utf8)
+		try! "InvalidData".write(to: testSpecificUrl(), atomically: false, encoding: .utf8)
 	}
 }
 
