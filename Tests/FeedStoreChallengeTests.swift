@@ -23,15 +23,13 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	override func setUp() {
 		super.setUp()
 		
-		setupMemoryBeforeTest()
+		setupEmptyStoreState(for: self)
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		
-		clearMemoryAfterTest()
-		
-		try? FileManager.default.removeItem(at: testSpecificUrl())
+		undoStoreSideEffects(for: self)
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -109,7 +107,7 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl(for: self))
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
@@ -118,26 +116,6 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 		addTeardownBlock { [weak instance] in
 			XCTAssertNil(instance)
 		}
-	}
-	
-	private func cachesDirectory() -> URL {
-		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-	}
-	
-	private func testSpecificUrl() -> URL {
-		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
-	}
-	
-	private func setupMemoryBeforeTest() {
-		removeArtifcatsFromMemory()
-	}
-	
-	private func clearMemoryAfterTest() {
-		removeArtifcatsFromMemory()
-	}
-	
-	private func removeArtifcatsFromMemory() {
-		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 }
 
@@ -165,7 +143,7 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	}
 	
 	private func writeInvalidDateToMemory() {
-		try! "InvalidData".write(to: testSpecificUrl(), atomically: false, encoding: .utf8)
+		try! "InvalidData".write(to: testSpecificUrl(for: self), atomically: false, encoding: .utf8)
 	}
 }
 

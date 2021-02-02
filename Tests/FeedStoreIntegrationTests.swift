@@ -17,13 +17,13 @@ class FeedStoreIntegrationTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		setupEmptyStoreState()
+		setupEmptyStoreState(for: self)
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		
-		undoStoreSideEffects()
+		undoStoreSideEffects(for: self)
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -72,34 +72,14 @@ class FeedStoreIntegrationTests: XCTestCase {
 	// - MARK: Helpers
 	
 	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl(for: self))
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
-	}
-	
-	private func setupEmptyStoreState() {
-		removeArtifactsFromMemory()
-	}
-	
-	private func undoStoreSideEffects() {
-		removeArtifactsFromMemory()
-	}
-	
-	private func cachesDirectory() -> URL {
-		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-	}
-	
-	private func testSpecificUrl() -> URL {
-		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
 	}
 	
 	private func memoryLeakTracker(instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
 		addTeardownBlock { [weak instance] in
 			XCTAssertNil(instance)
 		}
-	}
-	
-	private func removeArtifactsFromMemory() {
-		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 }
