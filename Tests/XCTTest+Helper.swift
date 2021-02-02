@@ -13,7 +13,7 @@ extension XCTestCase {
 	
 	func memoryLeakTracker(instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
 		addTeardownBlock { [weak instance] in
-			XCTAssertNil(instance)
+			XCTAssertNil(instance, file: file, line: line)
 		}
 	}
 }
