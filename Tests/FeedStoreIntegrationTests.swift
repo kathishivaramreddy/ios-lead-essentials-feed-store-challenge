@@ -27,9 +27,22 @@ class FeedStoreIntegrationTests: XCTestCase {
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
-		//        let sut = makeSUT()
-		//
-		//        expect(sut, toRetrieve: .empty)
+		let sut = makeSUT()
+		
+		let exp = expectation(description: "Wait for retreive expectation")
+		sut.retrieve { result in
+			switch result {
+				case .empty:
+					break
+				default:
+					XCTFail("Expected to retreive empty cache but got \(result)")
+			}
+			exp.fulfill()
+		}
+		
+		wait(for: [exp], timeout: 1.0)
+		
+		expect(sut, toRetrieve: .empty)
 	}
 	
 	func test_retrieve_deliversFeedInsertedOnAnotherInstance() {
@@ -71,16 +84,32 @@ class FeedStoreIntegrationTests: XCTestCase {
 	
 	// - MARK: Helpers
 	
-	private func makeSUT() -> FeedStore {
-		fatalError("Must be implemented")
+	private func makeSUT(storeUrl: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+		let sut = CodableFeedStore(storeUrl: storeUrl ?? testSpecificUrl())
+		memoryLeakTracker(instance: sut, file: file, line: line)
+		return sut
 	}
 	
 	private func setupEmptyStoreState() {
-		
+		try? FileManager.default.removeItem(at: testSpecificUrl())
 	}
 	
 	private func undoStoreSideEffects() {
-		
+		try? FileManager.default.removeItem(at: testSpecificUrl())
+	}
+	
+	private func cachesDirectory() -> URL {
+		return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+	}
+	
+	private func testSpecificUrl() -> URL {
+		return cachesDirectory().appendingPathComponent("\(type(of:self))-test.store")
+	}
+	
+	private func memoryLeakTracker(instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(instance)
+		}
 	}
 	
 }
