@@ -20,6 +20,7 @@
 		08CE2BB52285BEF100183A1B /* FeedStoreChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */; };
 		F793B04725C6BEEC00FE5D8A /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F793B04625C6BEEC00FE5D8A /* CodableFeedStore.swift */; };
 		F793B07425C97F2F00FE5D8A /* FeedStoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F793B07325C97F2F00FE5D8A /* FeedStoreHelper.swift */; };
+		F793B07825C980AA00FE5D8A /* XCTTest+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F793B07725C980AA00FE5D8A /* XCTTest+Helper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreChallengeTests.swift; sourceTree = "<group>"; };
 		F793B04625C6BEEC00FE5D8A /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
 		F793B07325C97F2F00FE5D8A /* FeedStoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreHelper.swift; sourceTree = "<group>"; };
+		F793B07725C980AA00FE5D8A /* XCTTest+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTTest+Helper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */,
 				084BB13B24FE50A10091C705 /* FeedStoreIntegrationTests.swift */,
 				F793B07325C97F2F00FE5D8A /* FeedStoreHelper.swift */,
+				F793B07725C980AA00FE5D8A /* XCTTest+Helper.swift */,
 				08CE2B9B2285BBD100183A1B /* Info.plist */,
 			);
 			path = Tests;
@@ -252,6 +255,7 @@
 				08CE2BB12285BCE700183A1B /* XCTestCase+FailableRetrieveFeedStoreSpecs.swift in Sources */,
 				08CE2BAF2285BCE700183A1B /* XCTestCase+FeedStoreSpecs.swift in Sources */,
 				08CE2BB32285BCE700183A1B /* XCTestCase+FailableInsertFeedStoreSpecs.swift in Sources */,
+				F793B07825C980AA00FE5D8A /* XCTTest+Helper.swift in Sources */,
 				084BB13E24FE56830091C705 /* XCTestCase+FeedStoreHelpers.swift in Sources */,
 				08CE2BB52285BEF100183A1B /* FeedStoreChallengeTests.swift in Sources */,
 			);

@@ -76,10 +76,4 @@ class FeedStoreIntegrationTests: XCTestCase {
 		memoryLeakTracker(instance: sut, file: file, line: line)
 		return sut
 	}
-	
-	private func memoryLeakTracker(instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-		addTeardownBlock { [weak instance] in
-			XCTAssertNil(instance)
-		}
-	}
 }
