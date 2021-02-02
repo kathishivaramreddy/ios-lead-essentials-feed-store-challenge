@@ -28,20 +28,7 @@ class FeedStoreIntegrationTests: XCTestCase {
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
 		let sut = makeSUT()
-		
-		let exp = expectation(description: "Wait for retreive expectation")
-		sut.retrieve { result in
-			switch result {
-				case .empty:
-					break
-				default:
-					XCTFail("Expected to retreive empty cache but got \(result)")
-			}
-			exp.fulfill()
-		}
-		
-		wait(for: [exp], timeout: 1.0)
-		
+	
 		expect(sut, toRetrieve: .empty)
 	}
 	
