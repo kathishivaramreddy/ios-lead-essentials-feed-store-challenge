@@ -126,17 +126,17 @@ extension FeedStoreChallengeTests: FailableRetrieveFeedStoreSpecs {
 	func test_retrieve_deliversFailureOnRetrievalError() {
 		let sut = makeSUT()
 		
-		writeInvalidDateToMemory()
+		writeInvalidDataToMemory()
 		assertThatRetrieveDeliversFailureOnRetrievalError(on: sut)
 	}
 
 	func test_retrieve_hasNoSideEffectsOnFailure() {
 		let sut = makeSUT()
-		writeInvalidDateToMemory()
+		writeInvalidDataToMemory()
 		assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
 	}
 	
-	private func writeInvalidDateToMemory() {
+	private func writeInvalidDataToMemory() {
 		try! "InvalidData".write(to: testSpecificUrl(for: self), atomically: false, encoding: .utf8)
 	}
 }
