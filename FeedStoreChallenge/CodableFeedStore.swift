@@ -68,7 +68,7 @@ public final class CodableFeedStore: FeedStore {
 		let storeUrl = self.storeUrl
 		queue.async(flags: .barrier) {
 			do {
-				let encodedData = try! JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
+				let encodedData = try JSONEncoder().encode(Cache(items: feed.map { CodableFeedImage($0) } , timeStamp: timestamp))
 				try encodedData.write(to: storeUrl)
 				completion(nil)
 			} catch {
