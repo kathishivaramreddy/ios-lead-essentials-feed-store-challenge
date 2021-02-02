@@ -91,11 +91,11 @@ class FeedStoreIntegrationTests: XCTestCase {
 	}
 	
 	private func setupEmptyStoreState() {
-		try? FileManager.default.removeItem(at: testSpecificUrl())
+		removeArtifactsFromMemory()
 	}
 	
 	private func undoStoreSideEffects() {
-		try? FileManager.default.removeItem(at: testSpecificUrl())
+		removeArtifactsFromMemory()
 	}
 	
 	private func cachesDirectory() -> URL {
@@ -112,4 +112,7 @@ class FeedStoreIntegrationTests: XCTestCase {
 		}
 	}
 	
+	private func removeArtifactsFromMemory() {
+		try? FileManager.default.removeItem(at: testSpecificUrl())
+	}
 }
